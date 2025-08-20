@@ -1,5 +1,7 @@
 package pro.sky.HW211.service;
 import org.springframework.stereotype.Service;
+import pro.sky.HW211.Exceplions.EmployeeAlreadyAddedException;
+import pro.sky.HW211.Exceplions.EmployeeNotFoundException;
 import pro.sky.HW211.model.Employee;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +65,16 @@ public class EmployeeService {
     }
 
     // Добавить нового сотрудника
-    public String addEmployee(Employee employeeToAdd)
+    public String addEmployee(Employee employeeToAdd) throws Exception
     {
         boolean isEmployeeToAddExist = listEmployees.contains(employeeToAdd);
         if(isEmployeeToAddExist)
         {
-            return ("Сотрудник был добавлен ранее.");
+            throw new EmployeeAlreadyAddedException("");
+        }
+        if(listEmployees.size() >= maxCountOfEmployee)
+        {
+            throw new IndexOutOfBoundsException("Коллекция переполнена.");
         }
         listEmployees.add(employeeToAdd);
         boolean isAddedSuccessful = listEmployees.contains(employeeToAdd);
@@ -78,29 +84,33 @@ public class EmployeeService {
     }
 
     // Удалить сотрудника
-    public String deleteEmployee(int employeeToDelId)
+    public String deleteEmployee(int employeeToDelId) throws Exception
     {
         Employee employeeToDel = findEmployeeById(employeeToDelId);
         boolean isEmployeeToDelExist = listEmployees.contains(employeeToDel);
         if(!isEmployeeToDelExist)
         {
-            return ("Сотрудник был удалён ранее.");
+           throw new EmployeeNotFoundException("");
         }
         listEmployees.remove(employeeToDel);
         boolean isExist = listEmployees.contains(employeeToDel);
         if(!isExist)
-            return ("Сотрудник был удалён ранее.");
+            throw new EmployeeNotFoundException("");
         return ("Сотрудник успешно удалён.");
     }
 
     // Найти сотрудника по его id
-    public Employee findEmployeeById(int employeeId)
+    public Employee findEmployeeById(int employeeId) throws Exception
     {
         //Arrays.stream(arrayEmployees).filter(emp -> emp.getId() == employeeId);
         for (Employee e : listEmployees) {
             if (e.getId() == employeeId)
             {
                 return e;
+            }
+            else
+            {
+                throw new EmployeeNotFoundException("");
             }
         }
         return null;
