@@ -62,7 +62,48 @@ public class EmployeeService {
         return listOutput;
     }
 
+    // Добавить нового сотрудника
+    public String addEmployee(Employee employeeToAdd)
+    {
+        boolean isEmployeeToAddExist = listEmployees.contains(employeeToAdd);
+        if(isEmployeeToAddExist)
+        {
+            return ("Сотрудник был добавлен ранее.");
+        }
+        listEmployees.add(employeeToAdd);
+        boolean isAddedSuccessful = listEmployees.contains(employeeToAdd);
+        if(isAddedSuccessful)
+            return ("Сотрудник " + employeeToAdd.getId() + " был успешно добавлен.");
+        return "Сотрудник не добавлен.";
+    }
 
+    // Удалить сотрудника
+    public String deleteEmployee(int employeeToDelId)
+    {
+        Employee employeeToDel = findEmployeeById(employeeToDelId);
+        boolean isEmployeeToDelExist = listEmployees.contains(employeeToDel);
+        if(!isEmployeeToDelExist)
+        {
+            return ("Сотрудник был удалён ранее.");
+        }
+        listEmployees.remove(employeeToDel);
+        boolean isExist = listEmployees.contains(employeeToDel);
+        if(!isExist)
+            return ("Сотрудник был удалён ранее.");
+        return ("Сотрудник успешно удалён.");
+    }
 
+    // Найти сотрудника по его id
+    public Employee findEmployeeById(int employeeId)
+    {
+        //Arrays.stream(arrayEmployees).filter(emp -> emp.getId() == employeeId);
+        for (Employee e : listEmployees) {
+            if (e.getId() == employeeId)
+            {
+                return e;
+            }
+        }
+        return null;
+    }
 
 }
