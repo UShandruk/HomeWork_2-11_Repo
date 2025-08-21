@@ -7,6 +7,7 @@ import pro.sky.HW211.service.EmployeeService;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
+    // Конструктор
     public EmployeeController(EmployeeService counterService) {
         this.employeeService = counterService;
     }
